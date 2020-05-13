@@ -1,0 +1,29 @@
+LANGUAGES
+-> Flask/Python/Flask-SocketIO
+-> Javascript/jQuery
+-> HTML/CSS/ => Bootstrap/Bootswatch
+====================================================
+PAGES
+# HOMEPAGE
+[] "Join a Session"
+[] "Create a Session"
+
+# SWIPEPAGE
+[] "No" Button
+[] Current food
+  [] Food Title
+  [] Food Location
+  [] Food Description
+  [] External link
+[] "Yes" Button
+
+# WAITING PAGE
+[] Loading GIF?
+[] "Please wait, waiting for additional responses."
+
+# CONCLUSION PAGE
+[] "And the choice food is..." <choice_food>
+[] "Go back to Homepage"
+=====================================================
+FUNCTIONALITY
+{more research needed} 
