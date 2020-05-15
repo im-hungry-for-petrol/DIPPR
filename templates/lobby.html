@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Lobby - Waiting for others to join </title>
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/darkly/bootstrap.min.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <img src="waiting.gif" alt="Waiting for other players to join. Please wait!">
+
+    {% if session_id == host: %}
+      <form action="swipepage.html" method="POST">
+        <p> Once all the players have joined, press the button below to continue. </p>
+        <input type="submit" value="Go" name="host_go">
+      </form>
+    {% endif %}
+  </body>
+  </body>
+</html>

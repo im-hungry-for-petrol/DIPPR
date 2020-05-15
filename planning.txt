@@ -5,8 +5,8 @@ LANGUAGES
 ====================================================
 PAGES
 # HOMEPAGE
-[] "Join a Session"
-[] "Create a Session"
+[*] "Join a Session"
+[*] "Create a Session"
 
 # SWIPEPAGE
 [] "No" Button
@@ -26,4 +26,6 @@ PAGES
 [] "Go back to Homepage"
 =====================================================
 FUNCTIONALITY
-{more research needed} 
+{more research needed}
+=====================================================
+Dependencies
