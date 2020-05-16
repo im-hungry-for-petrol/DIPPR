@@ -29,6 +29,11 @@ LANGUAGES
 # CONCLUSION PAGE
 [] "And the choice food is..." <choice_food>
 [] "Go back to Homepage"
+
+# ADMIN PAGE
+[*] Adding new entries
+[*] Viewing previous entries
+[] Updating previous entries
 =====================================================
 FUNCTIONALITY
 {more research needed}

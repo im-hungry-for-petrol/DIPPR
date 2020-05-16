@@ -95,6 +95,42 @@ def waiting_conclusion():
 def conclusion():
     return render_template('conclusion.html')
 
+class Admin(db.Model):
+    """
+    Model for administering the database
+    """
+    id = db.Column(db.Integer, primary_key=True)
+    food_title = db.Column(db.String(20), unique=True, nullable=False)
+    food_description = db.Column(db.Text, unique=True, nullable=False)
+    food_img_link = db.Column(db.String(100), unique=True, default="Food Image")
+
+    def __repr__(self):
+        return "Food title: " + self.food_title + "Food Description: " + self.food_description
+
+    def __init__(self, food_title, food_description, food_img_link):
+        self.food_title = food_title
+        self.food_description = food_description
+        self.food_img_link = food_img_link
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    """
+    Adding instances to the database
+    """
+    current_entries = Admin.query.all()
+
+    if request.method == 'POST':
+        food_title = request.form['title']
+        food_description = request.form['description']
+        food_link = request.form['img']
+
+        new_food_item = Admin(food_title, food_description, food_link)
+        db.session.add(new_food_item)
+        db.session.commit()
+
+        return render_template('admin.html', message="Successfully added.", current_entries=current_entries)
+    return render_template('admin.html', current_entries=current_entries)
+
 if __name__ == "__main__":
     db.create_all()
     socketio.run(app, debug=True)
