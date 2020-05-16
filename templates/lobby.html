@@ -8,6 +8,8 @@
   <body>
     <img src="waiting.gif" alt="Waiting for other players to join. Please wait!">
 
+    <p> {{ session_id }} </p>
+    <p> {{ host }}</p>
     {% if session_id == host: %}
       <form action="swipepage.html" method="POST">
         <p> Once all the players have joined, press the button below to continue. </p>

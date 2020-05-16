@@ -3,10 +3,15 @@ LANGUAGES
 -> Javascript/jQuery
 -> HTML/CSS/ => Bootstrap/Bootswatch
 ====================================================
-PAGES
+===================== PAGES ========================
+====================================================
 # HOMEPAGE
 [*] "Join a Session"
 [*] "Create a Session"
+
+# LOBBY
+[*] "Waiting for other players to join. Please wait!"
+[] Host can proceed when chosen.
 
 # SWIPEPAGE
 [] "No" Button
