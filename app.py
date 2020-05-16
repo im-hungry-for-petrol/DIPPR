@@ -5,6 +5,7 @@ Main backend for DIPPR
 """
 from flask import Flask, render_template, request, session # other shit
 from flask_sqlalchemy import SQLAlchemy
+import random
 from flask_socketio import SocketIO
 import func_assist # imported files to making it more organized
 import requests
@@ -12,10 +13,12 @@ import re
 import uuid
 import ast
 
+NUM_ENTRIES = 10
+
 # basic flask app stuff
 app = Flask(__name__)
 app.secret_key = b'myFUKINGasshurtsBITCH'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dippr.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dippr_new.db'
 
 def generate_session_id():
     return str(uuid.uuid1())
@@ -24,9 +27,9 @@ def generate_session_id():
 db = SQLAlchemy(app)
 class Joined(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    session_name = db.Column(db.String(15), unique=True# never mind this dumb ass file
-, nullable=False)
+    session_name = db.Column(db.String(15), unique=True, nullable=False)
     joined = db.Column(db.Text, unique=True,nullable=False)
+    food_list = db.Column(db.Text, nullable=False)
 
     def __init__(self, session_name, host):
         # creating session name, immediately adding host
@@ -34,6 +37,14 @@ class Joined(db.Model):
         host_list_format = []
         host_list_format.append(host)
         self.joined = str(host_list_format)
+
+        # generating random list of foods, INEFFICIENT
+        list_food = []
+        for i in range(0, NUM_ENTRIES):
+            rand = random.randrange(0, Admin.query.count())
+            row = Admin.query[rand]
+            list_food.append(row)
+        self.food_list = str(list_food)
 
     def __repr__(self):
         return repr('_sessions__: ' + str(self.id) + ' ' + str(self.session_name)
