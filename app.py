@@ -6,13 +6,14 @@ Main backend for DIPPR
 from flask import Flask, render_template, request, session # other shit
 from flask_sqlalchemy import SQLAlchemy
 import random
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit, send, join_room, leave_room
 import func_assist # imported files to making it more organized
 import requests
 import re
 import uuid
 import ast
 
+# amount of entries to be presented to user on scroll
 NUM_ENTRIES = 10
 
 # basic flask app stuff
@@ -55,7 +56,9 @@ socketio = SocketIO(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def homepage():
+    # creating user session things
     user_session_current = generate_session_id()
+    session['user_session'] = user_session_current
 
     # checking for POST request
     if request.method == 'POST':
@@ -74,7 +77,7 @@ def homepage():
             db.session.commit()
 
             print("Successfully joined.")
-            return render_template('lobby.html', session_id=user_session_current, host=curr_host)
+            return render_template('lobby.html', session_id=user_session_current, host=curr_host, join_code=join_code)
         elif request.form.get('host_submit'):
             # new session, unique host
             print("Trying to add new host.")
@@ -83,7 +86,7 @@ def homepage():
             db.session.add(new_group)
             db.session.commit()
             print("Done.")
-            return render_template('lobby.html', session_id=user_session_current, host=user_session_current)
+            return render_template('lobby.html', session_id=user_session_current, host=user_session_current, join_code=host_code)
         else:
             return render_template('index.html', message='Invalid request.')
 
@@ -92,7 +95,31 @@ def homepage():
 
 @app.route('/lobby')
 def lobby():
+    if request.method == 'POST':
+        if request.form.get('host_go'):
+            pass
+            # add all the clients to a room
     return render_template('lobby.html')
+
+@socketio.on('my event')
+def joining(data, methods=['GET', 'POST']):
+    """
+    Accepting connections from clients, sending food list
+    to all clients. Each in separated rooms.
+    """
+    room = data['data']
+    join_room(room)
+    restaurant_list = Joined.query.filter_by(session_name=room).first()
+    restaurant_list = restaurant_list.food_list
+    print("Successfully connected to party.")
+    emit('list_restaurant', {'restaurant_list':restaurant_list}, room=room)
+
+@socketio.on('start_game')
+def redirect(no_data, methods=['GET, POST']):
+    """
+    Simply redirecting to new page.
+    """
+    
 
 @app.route('/swipe')
 def swipepage():

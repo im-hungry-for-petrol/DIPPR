@@ -3,27 +3,40 @@
   <head>
     <title>Lobby - Waiting for others to join </title>
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/darkly/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+        var socket = io();
+
+        // sending the join code so the user joins respective rooms
+        socket.on('connect', function() {
+          socket.emit('my event', {'data': "{{join_code}}"});
+        });
+
+        // getting restaurant list
+        socket.on('list_restaurant', (restaurant_list) => {
+          restaurant_list = restaurant_list['restaurant_list'];
+          console.log('Restaurant list has been sent to client.');
+        });
+
+        function begin_session()
+        {
+          // responsible for redirecting all users on form submission
+          socket.emit('start_game', {});
+        }
+    </script>
   </head>
 
   <body>
     <img src="waiting.gif" alt="Waiting for other players to join. Please wait!">
 
-    <p> {{ session_id }} </p>
-    <p> {{ host }}</p>
+    <p> {{ join_code }}</p>
+
     {% if session_id == host: %}
-      <form action="swipepage.html" method="POST">
+      <form action="swipepage.html" method="POST" onsubmit="begin_session()">
         <p> Once all the players have joined, press the button below to continue. </p>
         <input type="submit" value="Go" name="host_go">
       </form>
     {% endif %}
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
-    <script type="text/javascript" charset="utf-8">
-        var socket = io();
-        socket.on('connect', function() {
-            socket.emit('my event', {data: 'I\'m connected!'});
-        });
-    </script>
-    
   </body>
 </html>
