@@ -93,7 +93,7 @@ def homepage():
 
     return render_template('index.html')
 
-@app.route('/lobby')
+@app.route('/lobby', methods=['GET', 'POST'])
 def lobby():
     return render_template('lobby.html')
 
@@ -115,25 +115,18 @@ def joining(data, methods=['GET', 'POST']):
 @socketio.on('start_game')
 def start_game(data, methods=['GET, POST']):
     """
-    Simply redirecting to new page.         ## NEED TO GET THE ROOM FOR THIS!
+    Simply redirecting to new page.
     """
     room = data['data']
     print("#### Redirecting all clients. ###")
     emit('cmd', room=room, broadcast=True)
+    return True
 
-@socketio.on('redirect')
-def redirect(methods=['GET', 'POST']):
-    """
-    Redirecting all clients to swipe page.              # not redirecting other clients?
-    """
-    url = url_for('swipepage')
-    return redirect(url)
-
-###################################################################################
-
+@socketio.on('change_page')
 @app.route('/swipepage.html', methods=['GET', 'POST'])
-def swipepage(methods=['GET', 'POST']):
-    return render_template('swipepage.html')
+def swipepage(methods=['GET, POST']):
+    print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
+    return render_template('swipepage.html')       # not rendering the template????
 
 @app.route('/waiting_conclusion')
 def waiting_conclusion():

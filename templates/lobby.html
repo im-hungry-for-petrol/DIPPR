@@ -22,25 +22,25 @@
         {
           // responsible for redirecting all users on form submission
           socket.emit('start_game', {'data':"{{join_code}}"});
-        }
+        };
 
         socket.on('cmd', function() {
-          // this is getting to the client? no entiendo
+          // all clients are receiving this!
+          socket.emit('change_page');
           console.log('GOT TO REDIRECT');
-          socket.emit('redirect');
-        })
+        });
     </script>
   </head>
 
   <body>
-    <img src="waiting.gif" alt="Waiting for other players to join. Please wait!">
+    <img src="https://media3.giphy.com/media/QUmpqPoJ886Iw/200w.webp?cid=ecf05e471da89a2f319e1019fc13747622f203f8e55a8903&rid=200w.webp" alt="Waiting for other players to join. Please wait!">
 
     <p> {{ join_code }}</p>
 
     {% if session_id == host: %}
-      <form action="swipepage.html" method="POST" onsubmit="begin_session()">
+      <form action="" >
         <p> Once all the players have joined, press the button below to continue. </p>
-        <input type="submit" value="Go" name="host_go">
+        <input type="button" value="Go" onclick="begin_session()"/>
       </form>
     {% endif %}
 
