@@ -21,8 +21,14 @@
         function begin_session()
         {
           // responsible for redirecting all users on form submission
-          socket.emit('start_game', {});
+          socket.emit('start_game', {'data':"{{join_code}}"});
         }
+
+        socket.on('cmd', function() {
+          // this is getting to the client? no entiendo
+          console.log('GOT TO REDIRECT');
+          socket.emit('redirect');
+        })
     </script>
   </head>
 

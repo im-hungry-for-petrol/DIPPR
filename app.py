@@ -3,7 +3,7 @@ im-hungry-for-petrol
 app.def
 Main backend for DIPPR
 """
-from flask import Flask, render_template, request, session # other shit
+from flask import Flask, render_template, request, session, redirect, url_for # other shit
 from flask_sqlalchemy import SQLAlchemy
 import random
 from flask_socketio import SocketIO, emit, send, join_room, leave_room
@@ -95,10 +95,6 @@ def homepage():
 
 @app.route('/lobby')
 def lobby():
-    if request.method == 'POST':
-        if request.form.get('host_go'):
-            pass
-            # add all the clients to a room
     return render_template('lobby.html')
 
 @socketio.on('my event')
@@ -114,15 +110,29 @@ def joining(data, methods=['GET', 'POST']):
     print("Successfully connected to party.")
     emit('list_restaurant', {'restaurant_list':restaurant_list}, room=room)
 
-@socketio.on('start_game')
-def redirect(no_data, methods=['GET, POST']):
-    """
-    Simply redirecting to new page.
-    """
-    
+####################################################################################
 
-@app.route('/swipe')
-def swipepage():
+@socketio.on('start_game')
+def start_game(data, methods=['GET, POST']):
+    """
+    Simply redirecting to new page.         ## NEED TO GET THE ROOM FOR THIS!
+    """
+    room = data['data']
+    print("#### Redirecting all clients. ###")
+    emit('cmd', room=room, broadcast=True)
+
+@socketio.on('redirect')
+def redirect(methods=['GET', 'POST']):
+    """
+    Redirecting all clients to swipe page.              # not redirecting other clients?
+    """
+    url = url_for('swipepage')
+    return redirect(url)
+
+###################################################################################
+
+@app.route('/swipepage.html', methods=['GET', 'POST'])
+def swipepage(methods=['GET', 'POST']):
     return render_template('swipepage.html')
 
 @app.route('/waiting_conclusion')
