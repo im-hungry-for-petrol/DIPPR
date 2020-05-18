@@ -14,7 +14,7 @@
 
         // getting restaurant list
         socket.on('list_restaurant', (restaurant_list) => {
-          restaurant_list = restaurant_list['restaurant_list'];
+          window.restaurant_list = restaurant_list['restaurant_list'];
           console.log('Restaurant list has been sent to client.');
         });
 
@@ -24,10 +24,9 @@
           socket.emit('start_game', {'data':"{{join_code}}"});
         };
 
-        socket.on('cmd', function() {
+        socket.on('cmd', function(data) {
           // all clients are receiving this!
-          socket.emit('change_page');
-          console.log('GOT TO REDIRECT');
+          window.location = data.url;
         });
     </script>
   </head>

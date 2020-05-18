@@ -119,14 +119,12 @@ def start_game(data, methods=['GET, POST']):
     """
     room = data['data']
     print("#### Redirecting all clients. ###")
-    emit('cmd', room=room, broadcast=True)
+    emit('cmd', {'url': url_for('swipepage')}, room=room)
     return True
 
-@socketio.on('change_page')
 @app.route('/swipepage.html', methods=['GET', 'POST'])
 def swipepage(methods=['GET, POST']):
-    print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-    return render_template('swipepage.html')       # not rendering the template????
+    return render_template('swipepage.html')
 
 @app.route('/waiting_conclusion')
 def waiting_conclusion():

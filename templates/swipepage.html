@@ -3,6 +3,11 @@
   <head>
     <title> Swipey no swipe! </title>
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/darkly/bootstrap.min.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+      console.log(window.restaurant_list);
+    </script>
   </head>
   <body>
     {% for food in food_list: %}
@@ -10,5 +15,10 @@
     <img src="{% print(food.food_img) %}">
     <p> {% print(food.food_description)%}</p>
     {% endfor %}
+
+    <form action="">
+      <input type="button" value="NO LIKEY!" onclick="begin_session()"/>
+      <input type="button" value="YES GOOD" onclick="begin_session()"/>
+    </form>
   </body>
 </html>
