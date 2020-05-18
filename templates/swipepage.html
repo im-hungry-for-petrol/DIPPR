@@ -4,21 +4,57 @@
     <title> Swipey no swipe! </title>
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/darkly/bootstrap.min.css" rel="stylesheet">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
-    <script type="text/javascript" charset="utf-8">
-      console.log(window.restaurant_list);
-    </script>
   </head>
   <body>
-    {% for food in food_list: %}
-    <h1> {% print(food.food_title) %}</h1>
-    <img src="{% print(food.food_img) %}">
-    <p> {% print(food.food_description)%}</p>
-    {% endfor %}
+    <h1 id='food_title'> CLICK TO BEGIN! </h1>
+    <p id='food_description'> Click 'yes' or 'no' below to begin. </p>
 
     <form action="">
-      <input type="button" value="NO LIKEY!" onclick="begin_session()"/>
-      <input type="button" value="YES GOOD" onclick="begin_session()"/>
+      <input type="button" value="NO LIKEY!" onclick="liked(like=false)"/>
+      <input type="button" value="YES GOOD" onclick="liked(like=true)"/>
     </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+
+      cookie_manager = document.cookie.split(';');
+      var list_restaurant_stuff = unescape(cookie_manager[1].split('=')[1]);
+      var go_to_url = unescape(cookie_manager[2].split('=')[1]);
+      restaurant_stuff = list_restaurant_stuff.replace('[', '');
+      restaurant_stuff = list_restaurant_stuff.replace(']', '');
+
+      var restaurants_to_choose = [];
+      var liked_arr = [];
+
+      // parsing
+      var restaurant_stuff = list_restaurant_stuff.split('Food title: ')
+
+      for (element of restaurant_stuff){
+        curr_restaurant = element.split('Food Description: ');
+        restaurants_to_choose.push(curr_restaurant);
+      };
+
+      var count_swipes = 1;     // starting past the weird bracket
+      console.log(count_swipes);
+      function liked(like)
+      {
+        if (restaurants_to_choose[count_swipes] == null)
+        {
+          window.location = go_to_url;
+        };
+        document.getElementById('food_title').innerHTML = restaurants_to_choose[count_swipes][0];
+        document.getElementById('food_description').innerHTML = restaurants_to_choose[count_swipes][1];
+        if (like == true)
+        {
+          liked_arr.push();
+        };
+        count_swipes = count_swipes + 1;
+        console.log('-------');
+        console.log(count_swipes);
+
+
+      };
+
+    </script>
   </body>
 </html>

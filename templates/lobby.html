@@ -14,7 +14,7 @@
 
         // getting restaurant list
         socket.on('list_restaurant', (restaurant_list) => {
-          window.restaurant_list = restaurant_list['restaurant_list'];
+          document.cookie = "rest_list=" + escape(restaurant_list['restaurant_list']);
           console.log('Restaurant list has been sent to client.');
         });
 
@@ -26,6 +26,7 @@
 
         socket.on('cmd', function(data) {
           // all clients are receiving this!
+          document.cookie = "waiting_conclusion=" + escape(data.waiting_conclusion);
           window.location = data.url;
         });
     </script>

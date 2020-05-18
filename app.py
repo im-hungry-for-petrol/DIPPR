@@ -45,7 +45,8 @@ class Joined(db.Model):
             rand = random.randrange(0, Admin.query.count())
             row = Admin.query[rand]
             list_food.append(row)
-        self.food_list = str(list_food)
+        list_food= str(list_food)
+        self.food_list = list_food # the escape shall be plus
 
     def __repr__(self):
         return repr('_sessions__: ' + str(self.id) + ' ' + str(self.session_name)
@@ -119,7 +120,7 @@ def start_game(data, methods=['GET, POST']):
     """
     room = data['data']
     print("#### Redirecting all clients. ###")
-    emit('cmd', {'url': url_for('swipepage')}, room=room)
+    emit('cmd', {'url': url_for('swipepage'), 'waiting_conclusion': url_for('waiting_conclusion')}, room=room)
     return True
 
 @app.route('/swipepage.html', methods=['GET', 'POST'])
