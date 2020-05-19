@@ -19,7 +19,7 @@ NUM_ENTRIES = 10
 # basic flask app stuff
 app = Flask(__name__)
 app.secret_key = b'myFUKINGasshurtsBITCH'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dippr_new.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dippr_new2.db'
 
 def generate_session_id():
     return str(uuid.uuid1())
@@ -168,7 +168,22 @@ def conclusion(data, methods=['GET', 'POST']):
 
     print(session['user_session'])
     print("Successfully connected to party.")
-    # emit('list_restaurant', {'restaurant_list':restaurant_list}, room=room)
+    return render_template('waiting_conclusion', {'host_certainty':host_certainty})
+
+@socketio.on('go_to_conclusion')
+def go_to_conclusion(data):
+    # tally up votes and send it to all connected clients
+    room = data['data']
+    curr_query = Counter_Guy.query.filter_by(current_session=room).first()
+    vote_eval = curr_query.food_votes
+
+    poop = dict()
+    votes = vote_eval.split(',')
+    for i in votes:
+        poop[i] = poop.get(i, 0) + 1
+
+    emit('end_of_story', winner=poop, redirect_gurl=url_for('conclusion'), room=room)
+
 ####################################################################################
 
 @socketio.on('start_game')

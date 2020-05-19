@@ -15,16 +15,16 @@ LANGUAGES
 
 # SWIPEPAGE
 [*] "No" Button
-[] Current food
-  [] Food Title
+[*] Current food
+  [*] Food Title
   [] Food Location
-  [] Food Description
+  [*] Food Description
   [] External link
 [*] "Yes" Button
 
 # WAITING PAGE
-[] Loading GIF?
-[] "Please wait, waiting for additional responses."
+[*] Loading GIF?
+[*] "Please wait, waiting for additional responses."
 
 # CONCLUSION PAGE
 [] "And the choice food is..." <choice_food>
@@ -38,4 +38,8 @@ LANGUAGES
 FUNCTIONALITY
 {more research needed}
 =====================================================
-Dependencies
+TODO
+[] Add entries inside admin page
+[] Make conclusion page work
+[] Fix exceptions to make this more user friendly
+[] Deploy?
