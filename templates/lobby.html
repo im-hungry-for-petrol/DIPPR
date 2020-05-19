@@ -27,6 +27,7 @@
         socket.on('cmd', function(data) {
           // all clients are receiving this!
           document.cookie = "waiting_conclusion=" + escape(data.waiting_conclusion);
+          document.cookie = "room=" + escape(data.room);
           window.location = data.url;
         });
     </script>
@@ -35,9 +36,10 @@
   <body>
     <img src="https://media3.giphy.com/media/QUmpqPoJ886Iw/200w.webp?cid=ecf05e471da89a2f319e1019fc13747622f203f8e55a8903&rid=200w.webp" alt="Waiting for other players to join. Please wait!">
 
-    <p> {{ join_code }}</p>
+    <h1> {{ join_code }}</h1>
 
     {% if session_id == host: %}
+      <h3> HOST CONTROLS </h3>
       <form action="" >
         <p> Once all the players have joined, press the button below to continue. </p>
         <input type="button" value="Go" onclick="begin_session()"/>

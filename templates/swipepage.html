@@ -18,16 +18,31 @@
     <script type="text/javascript" charset="utf-8">
 
       cookie_manager = document.cookie.split(';');
-      var list_restaurant_stuff = unescape(cookie_manager[1].split('=')[1]);
-      var go_to_url = unescape(cookie_manager[2].split('=')[1]);
-      restaurant_stuff = list_restaurant_stuff.replace('[', '');
-      restaurant_stuff = list_restaurant_stuff.replace(']', '');
+      var list_restaurant_stuff;
+      var go_to_url;
+
+      for (cookie of cookie_manager)
+      {
+        if (cookie.split('=')[0].includes('rest_list'))
+        {
+          list_restaurant_stuff = unescape(cookie.split('=')[1]);
+          console.log('list: '+ list_restaurant_stuff);
+        } else if (cookie.split('=')[0].includes('waiting_conclusion'))
+        {
+          go_to_url = unescape(cookie.split('=')[1]);
+          console.log('go to url:' + go_to_url);
+        };
+      };
+
+      list_restaurant_stuff = list_restaurant_stuff.replace('[', '');
+      list_restaurant_stuff = list_restaurant_stuff.replace(']', '');
 
       var restaurants_to_choose = [];
       var liked_arr = [];
 
       // parsing
-      var restaurant_stuff = list_restaurant_stuff.split('Food title: ')
+      var restaurant_stuff = list_restaurant_stuff.split('Food title: ');
+
 
       for (element of restaurant_stuff){
         curr_restaurant = element.split('Food Description: ');
@@ -35,24 +50,23 @@
       };
 
       var count_swipes = 1;     // starting past the weird bracket
-      console.log(count_swipes);
       function liked(like)
       {
         if (restaurants_to_choose[count_swipes] == null)
         {
+          // clearing cookies
+          document.cookie = "waiting_conclusion=";
+          document.cookie = "votes=" + escape(liked_arr.toString());
+
           window.location = go_to_url;
         };
         document.getElementById('food_title').innerHTML = restaurants_to_choose[count_swipes][0];
         document.getElementById('food_description').innerHTML = restaurants_to_choose[count_swipes][1];
         if (like == true)
         {
-          liked_arr.push();
+          liked_arr.push(restaurants_to_choose[count_swipes-1][0]);
         };
         count_swipes = count_swipes + 1;
-        console.log('-------');
-        console.log(count_swipes);
-
-
       };
 
     </script>

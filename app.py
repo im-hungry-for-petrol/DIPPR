@@ -111,6 +111,64 @@ def joining(data, methods=['GET', 'POST']):
     print("Successfully connected to party.")
     emit('list_restaurant', {'restaurant_list':restaurant_list}, room=room)
 
+class Counter_Guy(db.Model):
+    """
+    Responsible for tallying up votes at the end of everything
+    """
+    id = db.Column(db.Integer, primary_key=True)
+    food_votes = db.Column(db.Text, nullable=False)   # stringified python dictionary
+    current_session = db.Column(db.Text, unique=True, nullable=False)
+
+    def __init__(self, curr_sesh, votes):
+        self.food_votes = votes
+        self.current_session = curr_sesh
+
+    def __repr__():
+        return "Votes: " + str(self.current_session)
+
+@socketio.on('conclusion')
+def conclusion(data, methods=['GET', 'POST']):
+    """
+    Accepting connections from clients, sending food list
+    to all clients. Each in separated rooms.
+    """
+    room = data['data']
+    rest_list = data['rest_list']
+    votes = str(data['votes'])
+    print(room)
+    print(rest_list)
+    print(votes)
+    join_room(room)
+
+    # updating votes
+    try:
+        # trying to add to an already defined thing will throw an exception
+        print('%%%%%%%')
+        new_tally = Counter_Guy(room, votes)
+        db.session.add(new_tally)
+        db.session.commit()
+        print('Vote tried and submitted.')
+    except:
+        # get existing vote entries, append to string
+        print('---------')
+        curr_query = Counter_Guy.query.filter_by(current_session=room).first()
+        curr_query.food_votes = curr_query.food_votes + votes
+        db.session.commit()
+        print('Vote successfully submitted, via exception.')
+
+    # checking if the user is the host
+    session_guy = session['user_session']
+
+    query = Joined.query.filter_by(session_name=room).first()
+    host_find = query.joined
+
+    if (session_guy == host_find[0]):
+        host_certainty = True
+        print('He is the host!')
+
+    print(session['user_session'])
+    print("Successfully connected to party.")
+    # emit('list_restaurant', {'restaurant_list':restaurant_list}, room=room)
 ####################################################################################
 
 @socketio.on('start_game')
@@ -120,7 +178,7 @@ def start_game(data, methods=['GET, POST']):
     """
     room = data['data']
     print("#### Redirecting all clients. ###")
-    emit('cmd', {'url': url_for('swipepage'), 'waiting_conclusion': url_for('waiting_conclusion')}, room=room)
+    emit('cmd', {'url': url_for('swipepage'), 'waiting_conclusion': url_for('waiting_conclusion'), 'room': room}, room=room)
     return True
 
 @app.route('/swipepage.html', methods=['GET', 'POST'])

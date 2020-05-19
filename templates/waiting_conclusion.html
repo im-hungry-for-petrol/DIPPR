@@ -3,9 +3,43 @@
   <head>
     <title> Awaiting response </title>
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/darkly/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+        var socket = io();
+        var join_code;
+        cookie_manager = document.cookie;
+        cookie_manager = cookie_manager.split(';');
+
+        // parsing document cookies
+        for (cookie of cookie_manager)
+        {
+          if (cookie.split('=')[0].includes('room'))
+          {
+            join_code = unescape(cookie.split('=')[1]);
+            console.log('list: '+ join_code);
+          } else if (cookie.split('=')[0].includes('vote'))
+          {
+            votes = unescape(cookie.split('=')[1]);
+            console.log('votes: ' + votes);
+          } else if (cookie.split('=')[0].includes('rest_list'))
+          {
+            rest_list = unescape(cookie.split('=')[1]);
+            console.log('rest list: ' + rest_list);
+          };
+        };
+        var data_to_send = {'data': join_code,
+                            'rest_list':rest_list,
+                            'votes':votes};
+        // sending the join code so the user joins respective rooms
+        socket.on('connect', function() {
+          socket.emit('conclusion', data_to_send);
+        });
+
+    </script>
   </head>
   <body>
     <h3> Waiting for other responses. </h3>
+    <img src="https://media.tenor.com/images/175a10294d7a760fe1703e4dae63c04d/tenor.gif" alt="waiting">
     <p> Contact the host of your session if you have any problems, I guess. </p>
   </body>
 </html>
